@@ -29,12 +29,19 @@ class SubsController < ApplicationController
     #   params.require(:model_name).permit(:everything the model has)
     # end
 
+
+    #callbacks (before_action, after_action, skip_before_action, skip_after_action)
+
+  before_action :find_sub, only: [:show, :update, :edit, :destroy]
+
   def index
     @subs = Sub.all
+    # render index.html.erb
+
+    render partial: 'form'
   end
 
   def show
-    @sub = Sub.find(params[:id])
   end
 
   def new
@@ -52,12 +59,11 @@ class SubsController < ApplicationController
   end
 
   def edit
-    @sub = Sub.find(params[:id])
+    # render edit.html.erb
+    render partial: 'form'
   end
 
   def update
-    Sub.find(params[:id]).update(sub_params)
-
     if @sub.update(sub_params)
       redirect_to @sub
     else 
@@ -66,12 +72,16 @@ class SubsController < ApplicationController
   end
 
   def destroy
-    Sub.find(params{:id}).destroy
+    @sub.destroy
     redirect_to subs_path
   end
 
   private
   def sub_params
     params.require(:sub).permis(:name)
+  end
+
+  def find_sub
+    @sub = Sub.find(params[:id])
   end
 end
